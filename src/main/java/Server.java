@@ -4,20 +4,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Server {
-
-    public static void main(String[] args) {
-        ExecutorService threadPool = Executors.newFixedThreadPool(64);
+    public static void start(int countThread) {
         Settings settings = new Settings();
         ResponsText respons = new ResponsText();
-        LogicResponse logicResponse = new LogicResponse();
+        ResponseProcessor logicResponse = new ResponseProcessor();
+        ExecutorService threadPool = Executors.newFixedThreadPool(countThread);
 
-
-        try (ServerSocket serverSocket = new ServerSocket(settings.readSetting())) {
+        try (ServerSocket serverSocket = new ServerSocket(settings.port())) {
             while (true) {
                 Socket socket = serverSocket.accept();
 
@@ -46,9 +43,6 @@ public class Server {
                 IOException e) {
             e.printStackTrace();
         }
-
     }
+
 }
-
-
-

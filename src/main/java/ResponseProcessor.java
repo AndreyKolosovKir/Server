@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class LogicResponse {
+public class ResponseProcessor {
 
     private static final List<String> validPaths = List.of(
             "/index.html",
@@ -32,7 +32,7 @@ public class LogicResponse {
     }
 
     public static Path getFilePath(String path) {
-        return Path.of("Server/public", path);
+        return Path.of("public", path);
     }
 
     public static String getType(Path filePath) throws IOException {
