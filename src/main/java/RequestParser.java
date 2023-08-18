@@ -1,6 +1,10 @@
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -45,19 +49,21 @@ public class RequestParser {
             in.skip(headersDelimiter.length);
 
             final var contentLength = extractHeader(headers, "Content-Length");
-            byte[] bodyBytes = new byte[0];
+
+            List<NameValuePair> queryParams = null;
             if (contentLength.isPresent()) {
                 final int length = Integer.parseInt(contentLength.get());
-                bodyBytes = in.readNBytes(length);
+                final var bodyBytes = in.readNBytes(length);
 
                 final String body = new String(bodyBytes);
+                queryParams = URLEncodedUtils.parse(body, StandardCharsets.UTF_8);
                 System.out.println("----->Body\r\n" + body);
             }
             return builderRequest
                     .method(method)
                     .path(path)
                     .headers(headers)
-                    .body(bodyBytes)
+                    .queryParams(queryParams)
                     .build();
         }
         return builderRequest

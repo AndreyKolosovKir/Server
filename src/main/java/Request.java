@@ -1,7 +1,4 @@
 import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class Request {
@@ -10,14 +7,15 @@ public class Request {
 
     private final String protocolVersion;
     private final List<String> headers;
-    private final byte[] body;
+    private final List<NameValuePair> queryParams;
 
-    public Request(String method, String path, String protocolVersion, List<String> headers, byte[] body) {
+
+    public Request(String method, String path, String protocolVersion, List<String> headers, List<NameValuePair> queryParams) {
         this.method = method;
         this.path = path;
         this.protocolVersion = protocolVersion;
         this.headers = headers;
-        this.body = body;
+        this.queryParams = queryParams;
     }
 
     public String getMethod() {
@@ -28,9 +26,6 @@ public class Request {
         return headers;
     }
 
-    public byte[] getBody() {
-        return body;
-    }
 
     public String getPath() {
         return path;
@@ -41,22 +36,15 @@ public class Request {
     }
 
     public String getQueryParam(String name) {
-        String value = null;
-        String paramsLine = new String(getBody());
-        List<NameValuePair> params = URLEncodedUtils.parse(paramsLine, StandardCharsets.UTF_8);
-        for (NameValuePair param : params) {
-            if (param.getName() == name) {
-                value = param.getValue();
+        for (NameValuePair param : queryParams) {
+            if (param.getName().equals(name)) {
+                return param.getValue();
             }
         }
-        return value;
+        return null;
     }
 
     public List<NameValuePair> getQueryParams() {
-        String paramsLine = new String(getBody());
-        List<NameValuePair> params = URLEncodedUtils.parse(paramsLine, StandardCharsets.UTF_8);
-        return params;
+        return queryParams;
     }
-
-
 }

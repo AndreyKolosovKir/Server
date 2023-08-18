@@ -1,3 +1,5 @@
+import org.apache.http.NameValuePair;
+
 import java.util.List;
 
 public class BuilderRequest {
@@ -6,7 +8,7 @@ public class BuilderRequest {
 
     private String protocolVersion;
     private List<String> headers;
-    private byte[] body;
+    private List<NameValuePair> queryParams;
 
     public BuilderRequest method(String method) {
         this.method = method;
@@ -28,12 +30,12 @@ public class BuilderRequest {
         return this;
     }
 
-    public BuilderRequest body(byte[] body) {
-        this.body = body;
+    public BuilderRequest queryParams(List<NameValuePair> queryParams) {
+        this.queryParams = queryParams;
         return this;
     }
 
     public Request build() {
-        return new Request(method, path, protocolVersion, headers, body);
+        return new Request(method, path, protocolVersion, headers, queryParams);
     }
 }
