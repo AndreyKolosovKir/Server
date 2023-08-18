@@ -29,14 +29,12 @@ public class Server {
         }
     }
 
-
     public void addHandler(String method, String path, Handler handler) {
         Map<String, Handler> methodMap = handlers.get(method);
 
         if (methodMap == null) {
             methodMap = new HashMap<>();
         }
-
         methodMap.put(path, handler);
         handlers.put(method, methodMap);
     }
